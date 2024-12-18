@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  model:
+    image: rayenallaya/model-aws-e-commerce
+    container_name: model
+    ports:
+      - "4000:4000"
+    networks:
+      - ecom-network
+
+  backend:
+    image: rayenallaya/back-aws-e-commerce
+    container_name: backend
+    ports:
+      - "5000:5000"
+    env_file:
+      - backend.env
+    networks:
+      - ecom-network
+
+  frontend:
+    image: rayenallaya/front-aws-e-commerce
+    container_name: frontend
+    ports:
+      - "3000:3000"
+    env_file:
+      - frontend.env
+    depends_on:
+      - model
+      - backend
+    networks:
+      - ecom-network
+
+networks:
+  ecom-network:
+    driver: bridge
